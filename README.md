@@ -4,6 +4,42 @@ PyTorch implementation of LGC-DRNet for binary crack segmentation. Only the supp
 
 [Data and weights](DATA_DOWNLOAD.md)
 
+## Network Architecture
+
+LGC-DRNet combines a truncated MobileNetV3-Large encoder, lightweight local-global context modeling with strip pooling, and a narrow-channel deformable refinement decoder. Semantic skip adapters connect shallow features to the decoder to support fine-detail reconstruction.
+
+![LGC-DRNet architecture and module details](assets/architecture.png)
+
+*Architecture of LGC-DRNet, including the context module and multi-stage deformable refinement decoder.*
+
+## Experimental Results
+
+### fine_crack_530_dataset
+
+LGC-DRNet achieves an IoU of 81.65% and an mIoU of 90.53% on the fine_crack_530_dataset. The following table compares segmentation performance and model complexity. Results are averaged over three random seeds, with standard deviations shown in parentheses. Bold and underlined entries indicate the best and second-best results, respectively.
+
+![Performance and complexity comparison on the fine_crack_530_dataset](assets/fine_crack_530_dataset_comparison.png)
+
+*Performance and complexity comparison on the fine_crack_530_dataset. Params and FLOPs denote parameter count and computational cost, respectively.*
+
+![Qualitative comparison on the fine_crack_530_dataset](assets/fine_crack_530_dataset_qualitative.png)
+
+*Qualitative comparison on the fine_crack_530_dataset. Red boxes highlight local differences in the predicted crack structures. Examples illustrate crack continuity, fine-detail preservation, and responses to background interference.*
+
+### Four Public Crack Datasets
+
+Models are independently trained and tested on each dataset. LGC-DRNet achieves mIoU values of 92.58%, 86.47%, 82.78%, and 79.22% on DeepCrack, CamCrack789, CrackMap, and Crack500, respectively, ranking first among the methods in the comparison table.
+
+![Quantitative comparison on four public crack datasets](assets/public_comparison.png)
+
+*Quantitative comparison on four public crack datasets. Results for CarNet34, SCSegamba, and MixerCSeg are taken from the publication cited as [17] in the manuscript; the remaining results are averages over three random seeds. These literature results are reference comparisons rather than results reproduced in this repository. Reference numbers in the table follow the manuscript.*
+
+![Qualitative comparison on four public crack datasets](assets/public_qualitative.png)
+
+*Qualitative comparison on four public crack datasets. Red boxes highlight local prediction differences across thin cracks and textured backgrounds.*
+
+The tables and qualitative figures retain their manuscript numbering. Comparison models are shown for evaluation only; this repository includes only the LGC-DRNet implementation.
+
 ## Installation
 
 Use Python 3.10–3.12. Install matching PyTorch and torchvision builds for your CPU or CUDA environment, then install the remaining dependencies:
