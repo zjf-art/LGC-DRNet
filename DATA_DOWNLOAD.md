@@ -6,7 +6,7 @@ The datasets, trained LGC-DRNet checkpoints, test predictions, and MobileNetV3-L
 
 | Resource | Contents | Download |
 | --- | --- | --- |
-| `public_datasets` | DeepCrack, CamCrack789, CrackMap, and Crack500 datasets, LGC-DRNet checkpoints, and test predictions | [Google Drive](https://drive.google.com/drive/folders/1HMdaT2yQir5Am6P_GyLymeC-S4HhqDH?usp=sharing) |
+| `public_datasets` | DeepCrack, CamCrack789, CrackMap, and Crack500 datasets, LGC-DRNet checkpoints, and test predictions | [Google Drive](https://drive.google.com/drive/folders/1HMdaT2yQir5Am6P_GyLymeC-S4H2hqDH?usp=sharing) |
 | `fine_crack_530_dataset` | Training and test data, LGC-DRNet checkpoints, and test predictions | [Google Drive](https://drive.google.com/drive/folders/1ngnk8ducJu-7LaxSz_DRy8YAmzAn0--l?usp=sharing) |
 | MobileNetV3-Large backbone weights | `mobilenet_v3_large-8738ca79.pth` used to initialize the LGC-DRNet backbone | [Google Drive](https://drive.google.com/drive/folders/1fAQLsMvx7hgghhKZFGi-GWpYxUeQ6k84?usp=sharing) |
 
