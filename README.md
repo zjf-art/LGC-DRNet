@@ -1,130 +1,160 @@
 # LGC-DRNet
 
-PyTorch implementation of LGC-DRNet for binary crack segmentation. Only the supplied LGC_DRNet architecture is included: a truncated MobileNetV3-Large encoder, global context, strip pooling, and a deformable refinement decoder. The layer names and tensor shapes used by the original state dictionary are preserved.
+Official PyTorch implementation of **LGC-DRNet**, an ultralightweight network for fine-crack segmentation on resource-constrained edge platforms.
 
-[Data and weights](DATA_DOWNLOAD.md)
+LGC-DRNet uses a truncated MobileNetV3-Large encoder, lightweight local–global context modeling with strip pooling, semantic skip adapters, and a narrow-channel deformable refinement decoder. This repository contains only the LGC-DRNet segmentation implementation. Camera hardware files and the RV1106 deployment package are not included in the current release.
 
-## Network Architecture
+Paper: *Edge-Deployable Ultralightweight LGC-DRNet for Fine-Crack Segmentation and Monitoring Using a Compact Vision Computing Camera*.
 
-LGC-DRNet combines a truncated MobileNetV3-Large encoder, lightweight local-global context modeling with strip pooling, and a narrow-channel deformable refinement decoder. Semantic skip adapters connect shallow features to the decoder to support fine-detail reconstruction.
+[Download datasets, checkpoints, predictions, and backbone weights](DATA_DOWNLOAD.md)
+
+## Network architecture
 
 ![LGC-DRNet architecture and module details](assets/architecture.png)
 
-*Architecture of LGC-DRNet, including the context module and multi-stage deformable refinement decoder.*
+*Architecture of LGC-DRNet, including the lightweight global connectivity context module and multi-stage deformable refinement decoder.*
 
-## Experimental Results
+## Main results
 
-### fine_crack_530_dataset
+LGC-DRNet contains **0.352 M parameters** and requires **1.090 GFLOPs** for a 512 × 512 input.
 
-LGC-DRNet achieves an IoU of 81.65% and an mIoU of 90.53% on the fine_crack_530_dataset. The following table compares segmentation performance and model complexity. Results are averaged over three random seeds, with standard deviations shown in parentheses. Bold and underlined entries indicate the best and second-best results, respectively.
+### Self-built submillimeter crack dataset
 
-![Performance and complexity comparison on the fine_crack_530_dataset](assets/fine_crack_530_dataset_comparison.png)
+LGC-DRNet achieves **81.65% IoU** and **90.53% mIoU** on the self-built dataset. Results in the comparison are reported as the mean of three independent runs, with standard deviations in parentheses.
 
-*Performance and complexity comparison on the fine_crack_530_dataset. Params and FLOPs denote parameter count and computational cost, respectively.*
+![Performance and complexity comparison on the self-built submillimeter crack dataset](assets/self_built_comparison.png)
 
-![Qualitative comparison on the fine_crack_530_dataset](assets/fine_crack_530_dataset_qualitative.png)
+*Table 1. Performance and complexity comparison on the self-built submillimeter crack dataset.*
 
-*Qualitative comparison on the fine_crack_530_dataset. Red boxes highlight local differences in the predicted crack structures. Examples illustrate crack continuity, fine-detail preservation, and responses to background interference.*
+![Qualitative comparison on the self-built submillimeter crack dataset](assets/self_built_qualitative.png)
 
-### Four Public Crack Datasets
+*Fig. 5. Qualitative comparison on the self-built submillimeter crack dataset. Red boxes highlight local differences in crack continuity, fine-detail preservation, and background interference.*
 
-Models are independently trained and tested on each dataset. LGC-DRNet achieves mIoU values of 92.58%, 86.47%, 82.78%, and 79.22% on DeepCrack, CamCrack789, CrackMap, and Crack500, respectively, ranking first among the methods in the comparison table.
+### Four public crack datasets
+
+LGC-DRNet achieves mIoU values of **92.58%**, **86.47%**, **82.78%**, and **79.22%** on DeepCrack, CamCrack789, CrackMap, and Crack500, respectively.
 
 ![Quantitative comparison on four public crack datasets](assets/public_comparison.png)
 
-*Quantitative comparison on four public crack datasets. Results for CarNet34, SCSegamba, and MixerCSeg are taken from the publication cited as [17] in the manuscript; the remaining results are averages over three random seeds. These literature results are reference comparisons rather than results reproduced in this repository. Reference numbers in the table follow the manuscript.*
+*Table 3. Quantitative comparison on four public crack datasets. Results for U-Net, CarNet34, SCSegamba, and MixerCSeg were taken from Ref. [17] in the manuscript. Results for LGC-DRNet, U-Net++, DeepLabv3, and EfficientCrackNet are means of three independent runs. Literature values are reference comparisons and were not reproduced in this repository.*
 
 ![Qualitative comparison on four public crack datasets](assets/public_qualitative.png)
 
-*Qualitative comparison on four public crack datasets. Red boxes highlight local prediction differences across thin cracks and textured backgrounds.*
+*Fig. 6. Qualitative comparison on four public crack datasets. Red boxes highlight local prediction differences for thin cracks and textured backgrounds.*
 
-The tables and qualitative figures retain their manuscript numbering. Comparison models are shown for evaluation only; this repository includes only the LGC-DRNet implementation.
+Comparison models appear only in the result figures. Their implementations are not included in this repository.
 
 ## Installation
 
-Use Python 3.10–3.12. Install matching PyTorch and torchvision builds for your CPU or CUDA environment, then install the remaining dependencies:
+Python 3.10–3.12 is recommended. Install a matching PyTorch and torchvision build for the target CPU or CUDA environment, followed by the remaining dependencies:
 
 ```bash
 python -m pip install -r requirements.txt
 ```
 
-For a CPU installation:
+CPU example:
 
 ```bash
 python -m pip install torch==2.5.1 torchvision==0.20.1 --index-url https://download.pytorch.org/whl/cpu
 python -m pip install -r requirements.txt
 ```
 
-The network requires the compiled `torchvision.ops.DeformConv2d` operator. It is not replaced by ordinary convolution. CUDA execution requires matching CUDA-capable PyTorch/torchvision wheels. This package contains PyTorch training and inference; it does not contain an RKNN model or RV1106 deployment implementation.
+The network requires the compiled `torchvision.ops.DeformConv2d` operator. CUDA users must install mutually compatible PyTorch, torchvision, and CUDA builds.
 
-Run all commands from this project directory.
+## Data preparation
 
-## Data
-
-Datasets, trained checkpoints, test predictions, and the MobileNetV3-Large backbone weights are distributed separately through cloud storage. See [DATA_DOWNLOAD.md](DATA_DOWNLOAD.md) for download links and placement instructions.
+Download the resources listed in [DATA_DOWNLOAD.md](DATA_DOWNLOAD.md). Each dataset must follow this structure:
 
 ```text
-dataset/CrackMap/train/images/sample.jpg
-dataset/CrackMap/train/labels/sample.png
-dataset/CrackMap/test/images/another_sample.jpg
-dataset/CrackMap/test/labels/another_sample.png
+dataset/
+└── <dataset_name>/
+    ├── train/
+    │   ├── images/
+    │   └── labels/
+    └── test/
+        ├── images/
+        └── labels/
 ```
 
-Masks are PNG with zero background and nonzero crack pixels. `masks` may replace `labels`. Use `--dataset CamCrack789` for image-to-target mask names. Duplicate image stems within a split and missing/mismatched masks are rejected.
+Masks must be PNG files with zero-valued background pixels and nonzero crack pixels. A `masks` directory may replace `labels`. For CamCrack789, use `--dataset CamCrack789` to enable its image-to-target filename mapping.
+
+Validate a dataset before training:
 
 ```bash
-python check_dataset.py --train_dir ./dataset/CrackMap/train --test_dir ./dataset/CrackMap/test --dataset CrackMap
+python check_dataset.py \
+  --train_dir ./dataset/CrackMap/train \
+  --test_dir ./dataset/CrackMap/test \
+  --dataset CrackMap
 ```
-
-This command also reports byte-identical images across splits. It does not detect overlapping patches or differently encoded copies.
 
 ## Training
 
-```bash
-python train.py --train_dir ./dataset/CrackMap/train --test_dir ./dataset/CrackMap/test --dataset CrackMap --output_dir ./output/CrackMap_3seed
-```
+The paper experiments use MobileNetV3-Large backbone initialization. Download the backbone checkpoint and place it at `vit_checkpoint/mobilenet_v3_large-8738ca79.pth`.
 
-Training runs three fixed random seeds sequentially, and the reported results are averages over the three runs. There is no seed selection argument. Defaults retain 512×512 input, batch size 1, 50 epochs, AdamW with learning rate 0.0005 and weight decay 0.001, polynomial decay, CE/Dice weights 0.5/0.5, frozen backbone BN statistics and no random augmentation. The original `drop_last=True` behavior is retained; use `--drop_last 0` to include incomplete batches. This changes batch composition. Training resize uses the original PIL RGB resize, whereas evaluation uses antialiased tensor resize, retaining the supplied preprocessing.
-
-For the original local pretrained initialization:
+Public-dataset example:
 
 ```bash
-python train.py --pretrained 1 --backbone_weights ./vit_checkpoint/mobilenet_v3_large-8738ca79.pth
+python train.py \
+  --train_dir ./dataset/CrackMap/train \
+  --test_dir ./dataset/CrackMap/test \
+  --dataset CrackMap \
+  --batch_size 1 \
+  --pretrained 1 \
+  --backbone_weights ./vit_checkpoint/mobilenet_v3_large-8738ca79.pth \
+  --output_dir ./output/CrackMap_3run_pretrained
 ```
 
-The paper results use MobileNetV3-Large backbone initialization. Download the backbone weights from [DATA_DOWNLOAD.md](DATA_DOWNLOAD.md) and provide a valid path with `--pretrained 1`. Missing or incompatible weights cause an explicit error. Use `--pretrained 0` only when random initialization is intended.
+Self-built-dataset example:
 
-Each run saves `config.json`, `best_metrics.json`, all epoch state dictionaries, `weights/best_mIoU.pth`, a text epoch log, TensorBoard events, and best-epoch probability/label/binary images with per-image CSV metrics. The top output directory contains `three_seed_best_results.csv`, `three_seed_statistics.csv` and `three_seed_summary.txt` with mean, sample standard deviation (`ddof=1`), median, minimum and maximum. Existing configured run directories are protected from overwriting. There is no optimizer-state resume feature; use a new output directory for a new run.
+```bash
+python train.py \
+  --train_dir ./dataset/fine_crack_530/train \
+  --test_dir ./dataset/fine_crack_530/test \
+  --dataset fine_crack_530 \
+  --batch_size 2 \
+  --pretrained 1 \
+  --backbone_weights ./vit_checkpoint/mobilenet_v3_large-8738ca79.pth \
+  --output_dir ./output/fine_crack_530_3run_pretrained
+```
+
+`train.py` performs three independent runs automatically and reports their mean. Default settings use 512 × 512 input, 50 epochs, AdamW, an initial learning rate of 0.0005, weight decay of 0.001, polynomial learning-rate decay, equal CE and Dice loss weights, frozen backbone batch-normalization statistics, and no random data augmentation.
 
 ## Independent evaluation
 
 ```bash
-python test.py --checkpoint ./path/to/best_mIoU.pth --test_dir ./dataset/CrackMap/test --dataset CrackMap --output_dir ./test_results/run1
+python test.py \
+  --checkpoint ./path/to/best_mIoU.pth \
+  --test_dir ./dataset/CrackMap/test \
+  --dataset CrackMap \
+  --output_dir ./test_results/run1
 ```
 
-The checkpoint loader accepts a plain state dictionary or one wrapped in `state_dict`, `model_state_dict` or `model`, including a `module.` prefix. Architecture compatibility is checked strictly. Evaluation uses the same pipeline as training and exports `metrics.json`, configuration, probability maps, binary masks, labels and per-image metrics. The output directory must be new.
+The loader accepts a plain state dictionary or a checkpoint wrapped in `state_dict`, `model_state_dict`, or `model`, including keys prefixed by `module.`. The output directory must not already exist.
 
 ## Image inference
 
 ```bash
-python predict.py --checkpoint ./path/to/best_mIoU.pth --input ./images --output_dir ./predictions/run1 --mode sliding --img_size 512 --stride 384
+python predict.py \
+  --checkpoint ./path/to/best_mIoU.pth \
+  --input ./images \
+  --output_dir ./predictions/run1 \
+  --mode sliding \
+  --img_size 512 \
+  --stride 384
 ```
 
-Input may be one image or a directory. Sliding windows preserve original resolution, average overlapping probabilities and align the final patch with the image boundary. Images smaller than a patch are padded and then cropped back. `--mode resize` instead outputs a square map at `--img_size`. Both modes save probability PNGs, binary masks and red overlays. No labels are required.
+The input can be one image or a directory. Sliding-window inference preserves the original resolution and averages probabilities in overlapping regions. No labels are required.
 
-## Metric definitions retained from the supplied source
+## Metric definitions
 
-- Probability maps are rounded to 8-bit PNG and evaluated on that quantized representation, rather than min/max normalized per image.
-- Thresholds are 0.00 through 0.99 in steps of 0.01, using `probability > threshold` for the sweep.
-- `mIoU` is the maximum over thresholds of the image-mean, two-class IoU; `IoU` is foreground IoU at that same threshold.
+- Probability maps are quantized to 8-bit PNG before evaluation.
+- Thresholds from 0.00 to 0.99 are evaluated in increments of 0.01.
+- `mIoU` is the maximum image-mean two-class IoU over thresholds; `IoU` is foreground IoU at the same threshold.
 - `Precision`, `Recall`, and `F1` use pooled pixel counts at the threshold maximizing pooled F1.
-- `ODS` is the maximum image-mean F1 over a common threshold. This source-specific macro-average definition differs from pooled dataset F1, which is reported as `F1`.
-- `OIS` is the mean of each image's best F1.
-- Per-image fixed-threshold CSV metrics use the quantized probability and `>= binary_threshold`; binary visualizations use unquantized probabilities. Quantization can therefore cause small boundary differences.
-- Empty foreground union has IoU 0; precision is 1 when no pixel is predicted positive; recall is 0 when no positive ground truth exists. These source conventions are retained.
-- The existing procedure evaluates `test_dir` after every epoch and chooses the checkpoint with the highest swept `mIoU` on that split. The implementation retains this selection behavior. Dataset names do not change this behavior; document the split's role accurately when reporting results.
+- `ODS` is the maximum image-mean F1 under one common threshold; `OIS` is the mean of each image's best F1.
+- Per-image fixed-threshold metrics use `>= binary_threshold`; threshold-sweep metrics use `> threshold`.
 
-## Checks and model profile
+## Verification and profiling
 
 ```bash
 python -m unittest discover -s tests -v
@@ -138,8 +168,24 @@ python -m pip install -r requirements-profile.txt
 python profile_model.py --flops
 ```
 
-The profiler reports unsupported operators. A partial fvcore count must not be described as a complete FLOP count, particularly if deformable convolution is unsupported. No paper complexity or accuracy claims are hardcoded.
+The profiler reports unsupported operators. Do not describe a partial count as complete when deformable convolution or another operator is unsupported.
 
-## Publication metadata
+## Scope of this release
 
-The datasets and weights are available through [DATA_DOWNLOAD.md](DATA_DOWNLOAD.md). Add the final paper citation and DOI after publication. Before making the repository public, add a project license and any third-party notices required by the redistributed public datasets.
+The repository currently provides the LGC-DRNet PyTorch code, download instructions, trained checkpoints, test predictions, and dataset resources. It does not currently provide the camera CAD/3D files, RKNN model, RV1106 deployment code, or complete device-development materials. After the relevant invention-patent applications receive official application numbers and acceptance notices, the authors plan to release additional camera-system model files and edge-deployment technical materials through this repository.
+
+## Citation
+
+If this work is useful in your research, cite the paper after its bibliographic record becomes available. GitHub can also generate software citation text from [CITATION.cff](CITATION.cff). The DOI and final journal information will be added after publication.
+
+## Licenses and third-party materials
+
+- Repository source code: [BSD 3-Clause License](LICENSE).
+- Self-built dataset: see [DATA_LICENSE.md](DATA_LICENSE.md).
+- Public datasets, pretrained weights, and third-party components: see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+
+The repository license does not grant rights to third-party datasets, pretrained weights, paper figures, camera hardware, patent claims, or materials not expressly included under that license.
+
+## Contact
+
+Corresponding author: Prof. Wenbin Deng, Xinjiang University, `dwb@xju.edu.cn`.
