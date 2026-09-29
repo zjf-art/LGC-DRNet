@@ -190,4 +190,5 @@ The repository license does not grant rights to third-party datasets, pretrained
 
 ## Contact
 
-Corresponding author: Liangfu Xie, Xinjiang University, `xieliangfu_xju@163.com`.
+Jiangfan Zhao  
+Email: `zhaojiangfan@stu.xju.edu.cn`
