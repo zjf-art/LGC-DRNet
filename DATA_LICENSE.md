@@ -10,7 +10,7 @@ Under CC BY 4.0, users may share and adapt the dataset for any purpose, provided
 
 Until the final paper citation and DOI are available, cite the dataset as:
 
-> Zhao, Jiangfan; Deng, Wenbin; Yi, Hongmei (2026). *Self-Built Millimeter-Scale Concrete Crack Dataset for Crack Segmentation*. Available through the LGC-DRNet repository: https://github.com/zjf-art/LGC-DRNet
+> Zhao, Jiangfan; Xu, Yan; Xie, Liangfu; Wang, Caijin; Liu, Jie; Zheng, Ping (2026). *Self-Built Millimeter-Scale Concrete Crack Dataset for Crack Segmentation*. Available through the LGC-DRNet repository: https://github.com/zjf-art/LGC-DRNet
 
 After publication, replace or supplement this provisional attribution with the final article citation and DOI.
 
