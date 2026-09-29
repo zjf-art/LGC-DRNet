@@ -18,9 +18,8 @@ Users must cite the corresponding original publications and obtain any permissio
 
 ## Comparison results and figures
 
-Some quantitative comparison values are taken from Ref. [17] in the manuscript and are identified as literature results in the README and paper. Comparison-model names and results are provided for scholarly reference only; implementations of those models are not included.
+Some quantitative comparison values are taken from Ref. [22] in the manuscript and are identified as literature results in the README and paper. Comparison-model names and results are provided for scholarly reference only; implementations of those models are not included.
 
 ## Camera and deployment materials
 
-The current repository license does not cover unreleased camera CAD/3D models, circuit or assembly materials, RKNN files, RV1106 deployment code, or patent claims. Any future release of those materials must state its own applicable license and third-party notices.
-
+Camera CAD/3D models, circuit and assembly materials, RKNN files, and RV1106 deployment code are not included in the current release. After the related invention-patent applications receive official application numbers and acceptance notices, the authors plan to supplement this repository with camera-system 3D model files and technical materials for edge deployment. Any applicable license terms and third-party notices will be provided with those materials when released.

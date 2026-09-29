@@ -7,10 +7,10 @@ Large resources are distributed separately from the GitHub repository.
 | Resource | Contents | Download |
 | --- | --- | --- |
 | Four public crack datasets | DeepCrack, CamCrack789, CrackMap, and Crack500 packages, LGC-DRNet checkpoints, and test predictions | [Google Drive](https://drive.google.com/file/d/1JVmg-cMsdvWd1agkVuvaid12ry_RnHeE/view?usp=sharing) |
-| Self-built submillimeter crack dataset | `fine_crack_530_dataset`, LGC-DRNet checkpoints, and test predictions | [Google Drive](https://drive.google.com/file/d/1MHNzDTdEARDdEnv-uKD6HWre3TZO1mWB/view?usp=sharing) |
+| Self-built millimeter-scale concrete crack dataset (530 images) | `fine_crack_530_dataset`, LGC-DRNet checkpoints, and test predictions | [Google Drive](https://drive.google.com/file/d/1MHNzDTdEARDdEnv-uKD6HWre3TZO1mWB/view?usp=sharing) |
 | MobileNetV3-Large backbone checkpoint | `mobilenet_v3_large-8738ca79.pth` used for backbone initialization | [Google Drive](https://drive.google.com/file/d/1cFuA8YgZplghXCD5Ez5Fo635cpyCUlLX/view?usp=sharing) |
 
-Confirm that each link opens in a private/incognito browser window before making the repository public.
+The self-built dataset contains 530 pixel-wise annotated 512 × 512 images collected from concrete bridge components and concrete specimens, with 450 training and 80 test images.
 
 ## Checkpoints and predictions
 
@@ -46,7 +46,7 @@ Self-built-dataset name:
 fine_crack_530
 ```
 
-Retain the train/test organization contained in each package. The training script does not create a random dataset split.
+Retain the train/test organization contained in each package. The training script does not create a random dataset split. Keep the supplied 450/80 split for the self-built dataset when reproducing the reported results.
 
 Masks must be PNG files. Pixel value `0` denotes background and every nonzero value denotes crack. Each mask must have the same original dimensions as its paired image.
 
@@ -87,4 +87,3 @@ The checkpoint must contain the complete torchvision MobileNetV3-Large state dic
 The self-built dataset is governed by [DATA_LICENSE.md](DATA_LICENSE.md). DeepCrack, CamCrack789, CrackMap, and Crack500 remain subject to their original licenses, access conditions, and citation requirements. The convenience package does not replace those terms. Before redistributing public-dataset files, confirm that each original license permits redistribution; otherwise provide only official source links, trained weights, and derived predictions.
 
 The MobileNetV3-Large checkpoint and all other third-party materials remain subject to their original terms. See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
-
