@@ -1,12 +1,14 @@
 # LGC-DRNet
 
-Official PyTorch implementation of **LGC-DRNet**, an ultralightweight network for fine-crack segmentation on resource-constrained edge platforms.
+This repository accompanies a study of **millimeter-scale concrete crack segmentation and quantitative width monitoring** using a compact edge-vision camera and the ultralightweight LGC-DRNet network. It provides the PyTorch implementation of LGC-DRNet and resources for reproducing the segmentation experiments.
 
-LGC-DRNet uses a truncated MobileNetV3-Large encoder, lightweight local–global context modeling with strip pooling, semantic skip adapters, and a narrow-channel deformable refinement decoder. This repository contains only the LGC-DRNet segmentation implementation. Camera hardware files and the RV1106 deployment package are not included in the current release.
+LGC-DRNet uses a truncated MobileNetV3-Large encoder, lightweight local–global context modeling with strip pooling, semantic skip adapters, and a narrow-channel deformable refinement decoder. The camera hardware files and RV1106 deployment package are not included in the current release.
 
-Paper: *Edge-Deployable Ultralightweight LGC-DRNet for Fine-Crack Segmentation and Monitoring Using a Compact Vision Computing Camera*.
+Paper: *A Lightweight Edge-Vision System with LGC-DRNet for Segmentation and Quantitative Monitoring of Millimeter-Scale Concrete Cracks*.
 
 [Download datasets, checkpoints, predictions, and backbone weights](DATA_DOWNLOAD.md)
+
+Self-built dataset: [530 annotated concrete crack images](https://drive.google.com/file/d/1MHNzDTdEARDdEnv-uKD6HWre3TZO1mWB/view?usp=sharing).
 
 ## Network architecture
 
@@ -18,17 +20,17 @@ Paper: *Edge-Deployable Ultralightweight LGC-DRNet for Fine-Crack Segmentation a
 
 LGC-DRNet contains **0.352 M parameters** and requires **1.090 GFLOPs** for a 512 × 512 input.
 
-### Self-built submillimeter crack dataset
+### Self-built millimeter-scale concrete crack dataset
 
-LGC-DRNet achieves **81.65% IoU** and **90.53% mIoU** on the self-built dataset. Results in the comparison are reported as the mean of three independent runs, with standard deviations in parentheses.
+The self-built dataset contains **530 pixel-wise annotated images** at 512 × 512 resolution from bridge concrete components and concrete specimens (450 training and 80 test images). LGC-DRNet achieves **81.65% IoU** and **90.53% mIoU** on this dataset. Relative to MixerCSeg, it uses **86.1% fewer parameters** and **46.8% fewer FLOPs**, while improving IoU and mIoU by **5.39** and **2.79 percentage points**, respectively. Results in the comparison are reported as the mean of three independent runs, with standard deviations in parentheses.
 
-![Performance and complexity comparison on the self-built submillimeter crack dataset](assets/self_built_comparison.png)
+![Performance and complexity comparison on the self-built millimeter-scale concrete crack dataset](assets/self_built_comparison.png)
 
-*Table 1. Performance and complexity comparison on the self-built submillimeter crack dataset.*
+*Table 1. Performance and complexity comparison on the self-built millimeter-scale concrete crack dataset.*
 
-![Qualitative comparison on the self-built submillimeter crack dataset](assets/self_built_qualitative.png)
+![Qualitative comparison on the self-built millimeter-scale concrete crack dataset](assets/self_built_qualitative.png)
 
-*Fig. 5. Qualitative comparison on the self-built submillimeter crack dataset. Red boxes highlight local differences in crack continuity, fine-detail preservation, and background interference.*
+*Fig. 5. Qualitative comparison on the self-built millimeter-scale concrete crack dataset. Red boxes highlight local differences in crack continuity, fine-detail preservation, and background interference.*
 
 ### Four public crack datasets
 
@@ -36,7 +38,7 @@ LGC-DRNet achieves mIoU values of **92.58%**, **86.47%**, **82.78%**, and **79.2
 
 ![Quantitative comparison on four public crack datasets](assets/public_comparison.png)
 
-*Table 3. Quantitative comparison on four public crack datasets. Results for U-Net, CarNet34, SCSegamba, and MixerCSeg were taken from Ref. [17] in the manuscript. Results for LGC-DRNet, U-Net++, DeepLabv3, and EfficientCrackNet are means of three independent runs. Literature values are reference comparisons and were not reproduced in this repository.*
+*Table 3. Quantitative comparison on four public crack datasets. Results for U-Net, CarNet34, SCSegamba, and MixerCSeg were taken from Ref. [22] in the manuscript. Results for LGC-DRNet, U-Net++, DeepLabv3, and EfficientCrackNet are means of three independent runs. Literature values are reference comparisons and were not reproduced in this repository.*
 
 ![Qualitative comparison on four public crack datasets](assets/public_qualitative.png)
 
@@ -188,4 +190,4 @@ The repository license does not grant rights to third-party datasets, pretrained
 
 ## Contact
 
-Corresponding author: Prof. Wenbin Deng, Xinjiang University, `dwb@xju.edu.cn`.
+Corresponding author: Liangfu Xie, Xinjiang University, `xieliangfu_xju@163.com`.
